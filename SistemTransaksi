@@ -1,0 +1,66 @@
+package Tugas4Pratikum;
+
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SistemTransaksi {
+    private static Scanner wedew = new Scanner(System.in);
+    private static List<Pelanggan> pelangganList = new ArrayList<>();
+    
+    static {
+        pelangganList.add(new Pelanggan("3812345678", 500000, "1234"));
+        pelangganList.add(new Pelanggan("5612345678", 1200000, "5678"));
+        pelangganList.add(new Pelanggan("7412345678", 2500000, "4321"));
+    }
+
+    public static void main(String[] args) {
+        boolean selesai = false;
+        
+        while (!selesai) {
+            System.out.println();
+            System.out.println("1. Pembelian");
+            System.out.println("2. Top Up");
+            System.out.println("3. Keluar");
+            System.out.print("Pilih menu: ");
+            int pilihan = wedew.nextInt();
+            wedew.nextLine();
+            
+            if (pilihan == 3) {
+                selesai = true;
+                continue;
+            }
+            
+            System.out.print("Masukkan nomor pelanggan: ");
+            String nomor = wedew.nextLine();
+            Pelanggan pelanggan = cariPelanggan(nomor);
+            
+            if (pelanggan != null) {
+                System.out.print("Masukkan PIN: ");
+                String pin = wedew.nextLine();
+
+                if (pelanggan.autentikasi(pin)) {
+                    System.out.print("Masukkan jumlah: Rp");
+                    double jumlah = wedew.nextDouble();
+                    wedew.nextLine();
+
+                    if (pilihan == 1) pelanggan.beli(jumlah);
+                    else pelanggan.topUp(jumlah);
+                } else {
+                    System.out.println("PIN salah.");
+                }
+            } else {
+                System.out.println("Nomor tidak ditemukan.");
+            }
+        }
+    }
+
+    private static Pelanggan cariPelanggan(String nomor) {
+        for (Pelanggan p : pelangganList) {
+            if (nomor.equals(p.getNomorPelanggan())) {
+                return p;
+            }
+        }
+        return null;
+    }
+}
